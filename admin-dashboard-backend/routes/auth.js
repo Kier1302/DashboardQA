@@ -9,7 +9,7 @@ const router = express.Router();
 // 🔹 REGISTER USER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -20,10 +20,15 @@ router.post("/register", async (req, res) => {
     // Hash password securely
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create new user
-    const user = new User({ name, email, password: hashedPassword, role: "admin" });
-    await user.save();
+    // Default role to "user" if not provided
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: role || "user",
+    });
 
+    await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Registration Error:", error);
@@ -31,7 +36,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// 🔹 LOGIN USER (Add this if missing)
+// 🔹 LOGIN USER
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,10 +60,35 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", token, role: user.role });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// 🔹 GET CURRENT USER (🔹 Fixes 404 Error)
+const authMiddleware = (req, res, next) => {
+  const token = req.header("Authorization");
+  if (!token) return res.status(401).json({ message: "Access denied. No token provided." });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(400).json({ message: "Invalid token" });
+  }
+};
+
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
