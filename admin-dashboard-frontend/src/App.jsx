@@ -22,7 +22,7 @@ const App = () => {
 
       try {
         const res = await axios.get("http://localhost:5000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` }, // Ensure "Bearer" format
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setUser(res.data);
@@ -38,20 +38,21 @@ const App = () => {
     fetchUser();
   }, []);
 
-  if (loading) return <p>Loading...</p>; // Prevent UI flicker
+  if (loading) return <p>Loading...</p>; // Prevents UI flicker
 
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes for Dashboards */}
+        {/* Protected Routes */}
         <Route
           path="/admin-dashboard"
           element={
             <ProtectedRoute user={user} role="admin">
-              <AdminDashboard />
+              <AdminDashboard setUser={setUser} />
             </ProtectedRoute>
           }
         />
@@ -59,12 +60,12 @@ const App = () => {
           path="/user-dashboard"
           element={
             <ProtectedRoute user={user} role="user">
-              <UserDashboard />
+              <UserDashboard setUser={setUser} />
             </ProtectedRoute>
           }
         />
 
-        {/* Redirect based on role */}
+        {/* Role-based Redirection */}
         <Route
           path="/dashboard"
           element={
@@ -75,6 +76,9 @@ const App = () => {
             )
           }
         />
+
+        {/* Fallback: Redirect unknown routes to login */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

@@ -60,6 +60,12 @@ const Login = ({ setUser }) => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {/* 🔹 Register Button */}
+        <p className="register-text">Don't have an account?</p>
+        <button className="register-button" onClick={() => navigate("/register")}>
+          Register
+        </button>
       </div>
     </div>
   );

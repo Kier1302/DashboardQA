@@ -2,9 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const fileRoutes = require("./routes/files"); // Added File Management Routes
 
 const app = express();
 
@@ -12,9 +14,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Serve uploaded files statically
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/files", require("./routes/files"));
 
 // Connect to MongoDB
 mongoose
