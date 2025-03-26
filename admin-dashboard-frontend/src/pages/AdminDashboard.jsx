@@ -71,6 +71,27 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteFile = async (id) => {
+    if (!window.confirm("⚠️ Are you sure you want to delete this file?")) return;
+  
+    try {
+      // Send DELETE request to the server
+      const response = await axios.delete(`http://localhost:5000/api/files/${id}`);
+      
+      if (response.status === 200) {
+        alert("🗑 File deleted successfully!");
+        fetchFiles(); // Refresh the list after deletion
+      } else {
+        alert("❌ Failed to delete file");
+      }
+    } catch (error) {
+      // Log full error response for debugging
+      console.error("❌ Error deleting file:", error.response || error.message);
+      alert("❌ Failed to delete file!");
+    }
+  };
+  
+
   // Handle logout
   const handleLogout = () => {
     // Remove the token from localStorage to clear the session
@@ -110,6 +131,7 @@ const AdminDashboard = () => {
               <th>File Name / URL</th>
               <th>Type</th>
               <th>Status</th>
+              <th>Action</th> {/* Added Action Column */}
             </tr>
           </thead>
           <tbody>
@@ -129,11 +151,15 @@ const AdminDashboard = () => {
                   </td>
                   <td>{file.type}</td>
                   <td>{file.status}</td>
+                  <td>
+                    {/* Delete button */}
+                    <button onClick={() => handleDeleteFile(file._id)}>🗑 Delete</button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3">⚠️ No files uploaded yet.</td>
+                <td colSpan="4">⚠️ No files uploaded yet.</td>
               </tr>
             )}
           </tbody>

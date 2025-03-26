@@ -91,4 +91,35 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    // Find the file in the database
+    const file = await File.findById(req.params.id);
+    if (!file) return res.status(404).json({ message: "⚠️ File not found" });
+
+    // Construct the file path based on the stored URL
+    const filePath = path.join(__dirname, "../uploads", file.url.split("/uploads/")[1]);
+    console.log("🔹 Deleting file at path:", filePath);
+
+    // Check if the file exists before trying to delete it
+    if (fs.existsSync(filePath)) {
+      console.log("✅ File exists, deleting...");
+      fs.unlinkSync(filePath); // Proceed with deletion
+    } else {
+      console.error("❌ File not found at path:", filePath);
+      return res.status(404).json({ message: "⚠️ File not found on the server" });
+    }
+
+    // Delete the file record from the database
+    await File.findByIdAndDelete(req.params.id);
+
+    console.log("🗑 File Deleted:", file);
+    res.status(200).json({ message: "✅ File deleted successfully" });
+  } catch (error) {
+    console.error("❌ Delete Error:", error.message);
+    res.status(500).json({ message: "❌ Server error", error: error.message });
+  }
+});
+
+
 module.exports = router;
