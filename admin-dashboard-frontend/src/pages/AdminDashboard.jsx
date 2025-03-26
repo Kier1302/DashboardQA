@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadUrl, setUploadUrl] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   // Fetch uploaded files
   useEffect(() => {
@@ -69,9 +71,20 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handle logout
+  const handleLogout = () => {
+    // Remove the token from localStorage to clear the session
+    localStorage.removeItem("token");
+    // Redirect to the login page
+    navigate("/login");
+  };
+
   return (
     <div className="admin-dashboard">
       <h2>📂 Admin Dashboard</h2>
+
+      {/* 🔹 Logout Button */}
+      <button onClick={handleLogout} className="logout-btn">Logout</button>
 
       {/* 🔹 Upload Files / Links */}
       <div className="upload-section">
