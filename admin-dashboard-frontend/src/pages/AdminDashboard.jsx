@@ -51,7 +51,13 @@ const AdminDashboard = () => {
       fetchFiles(); // Refresh list
     } catch (error) {
       console.error("❌ Upload failed:", error.response?.data);
-      alert("❌ Upload failed!");
+
+      // Handle duplicate error response
+      if (error.response?.data?.message === "⚠️ File already exists") {
+        alert("⚠️ This file already exists. Please upload a different file.");
+      } else {
+        alert("❌ Upload failed!");
+      }
     }
   };
 

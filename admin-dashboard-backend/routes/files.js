@@ -22,7 +22,21 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+// 🔹 File Filter for Type Validation
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  if (!allowedTypes.includes(file.mimetype)) {
+    return cb(new Error('⚠️ Invalid file type! Only JPG, PNG, and PDF are allowed.'));
+  }
+  cb(null, true);
+};
+
+// 🔹 Multer Instance with Size Limitation (10MB) and File Type Validation
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
+  fileFilter,
+});
 
 // 🔹 Upload File or Link
 router.post("/upload", upload.single("file"), async (req, res) => {
@@ -91,6 +105,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// 🔹 Delete File
 router.delete("/:id", async (req, res) => {
   try {
     // Find the file in the database
@@ -120,6 +135,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "❌ Server error", error: error.message });
   }
 });
-
 
 module.exports = router;
