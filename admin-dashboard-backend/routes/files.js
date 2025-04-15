@@ -112,17 +112,24 @@ router.delete("/:id", async (req, res) => {
     const file = await File.findById(req.params.id);
     if (!file) return res.status(404).json({ message: "⚠️ File not found" });
 
-    // Construct the file path based on the stored URL
-    const filePath = path.join(__dirname, "../uploads", file.url.split("/uploads/")[1]);
-    console.log("🔹 Deleting file at path:", filePath);
+    // Only attempt physical deletion for uploaded files
+    if (file.type === "file") {
+      const relativePath = file.url?.split("/uploads/")[1];
 
-    // Check if the file exists before trying to delete it
-    if (fs.existsSync(filePath)) {
-      console.log("✅ File exists, deleting...");
-      fs.unlinkSync(filePath); // Proceed with deletion
-    } else {
-      console.error("❌ File not found at path:", filePath);
-      return res.status(404).json({ message: "⚠️ File not found on the server" });
+      if (!relativePath) {
+        console.error("❌ File URL is invalid or missing:", file.url);
+        return res.status(400).json({ message: "❌ Invalid file URL" });
+      }
+
+      const filePath = path.join(__dirname, "../uploads", relativePath);
+      console.log("🔹 Deleting file at path:", filePath);
+
+      if (fs.existsSync(filePath)) {
+        console.log("✅ File exists, deleting...");
+        fs.unlinkSync(filePath);
+      } else {
+        console.warn("⚠️ File not found on disk, skipping physical deletion.");
+      }
     }
 
     // Delete the file record from the database
