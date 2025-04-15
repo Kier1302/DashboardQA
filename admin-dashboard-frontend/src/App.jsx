@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+
 import AdminDashboard from "./pages/AdminDashboard";
-import UserDashboard from "./pages/UserDashboard";
+import UploadFiles from "./pages/UploadFiles";
+import ApproveRejectFiles from "./pages/ApproveRejectFiles";
+import DeleteFiles from "./pages/DeleteFiles"; // ✅ This is your 3rd page
 import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -24,10 +26,9 @@ const App = () => {
         const res = await axios.get("http://localhost:5000/api/auth/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setUser(res.data);
       } catch (error) {
-        console.error("Error fetching user:", error.response?.data?.message || error.message);
+        console.error("Error fetching user:", error);
         setUser(null);
         localStorage.removeItem("token"); // Remove invalid token
       } finally {
@@ -38,29 +39,44 @@ const App = () => {
     fetchUser();
   }, []);
 
-  if (loading) return <p>Loading...</p>; // Prevents UI flicker
+  if (loading) return <p>Loading...</p>;
 
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="/register" element={<Register />} />
-
-        {/* Protected Routes */}
+        
+        {/* Protected Admin Dashboard Routes */}
         <Route
           path="/admin-dashboard"
           element={
             <ProtectedRoute user={user} role="admin">
-              <AdminDashboard setUser={setUser} />
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/user-dashboard"
+          path="/admin-dashboard/upload"
           element={
-            <ProtectedRoute user={user} role="user">
-              <UserDashboard setUser={setUser} />
+            <ProtectedRoute user={user} role="admin">
+              <UploadFiles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-dashboard/files"
+          element={
+            <ProtectedRoute user={user} role="admin">
+              <DeleteFiles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-dashboard/approval"
+          element={
+            <ProtectedRoute user={user} role="admin">
+              <ApproveRejectFiles />
             </ProtectedRoute>
           }
         />
@@ -77,7 +93,7 @@ const App = () => {
           }
         />
 
-        {/* Fallback: Redirect unknown routes to login */}
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
@@ -85,4 +101,3 @@ const App = () => {
 };
 
 export default App;
-
