@@ -5,9 +5,11 @@ import axios from "axios";
 import AdminDashboard from "./pages/AdminDashboard";
 import UploadFiles from "./pages/UploadFiles";
 import ApproveRejectFiles from "./pages/ApproveRejectFiles";
-import DeleteFiles from "./pages/DeleteFiles"; // ✅ This is your 3rd page
+import DeleteFiles from "./pages/DeleteFiles";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import Register from "./pages/Register"; // ✅ Capitalized properly
+import UserDashboard from "./pages/UserDashboard";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -23,14 +25,14 @@ const App = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/users", {
+        const res = await axios.get("http://localhost:5000/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(res.data);
+        setUser({ id: res.data._id, role: res.data.role });
       } catch (error) {
         console.error("Error fetching user:", error);
         setUser(null);
-        localStorage.removeItem("token"); // Remove invalid token
+        localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
@@ -46,8 +48,19 @@ const App = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register />} /> {/* ✅ Register route */}
         
-        {/* Protected Admin Dashboard Routes */}
+        {/* User Dashboard */}
+        <Route
+          path="/user-dashboard"
+          element={
+            <ProtectedRoute user={user} role="user">
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Dashboard Routes */}
         <Route
           path="/admin-dashboard"
           element={
@@ -71,6 +84,7 @@ const App = () => {
               <DeleteFiles />
             </ProtectedRoute>
           }
+          
         />
         <Route
           path="/admin-dashboard/approval"
@@ -79,6 +93,23 @@ const App = () => {
               <ApproveRejectFiles />
             </ProtectedRoute>
           }
+        />
+         <Route
+          path="/user-dashboard/upload"
+          element={
+            <ProtectedRoute user={user} role="user">
+              <UploadFiles />
+            </ProtectedRoute>
+          }
+        />
+          <Route
+          path="/user-dashboard/files"
+          element={
+            <ProtectedRoute user={user} role="user">
+              <DeleteFiles />
+            </ProtectedRoute>
+          }
+          
         />
 
         {/* Role-based Redirection */}

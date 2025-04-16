@@ -19,13 +19,26 @@ const Login = ({ setUser }) => {
       const { data } = await axios.post("http://localhost:5000/api/auth/login", { email, password });
 
       console.log("Login Response:", data); // Debugging log
-      localStorage.setItem("token", data.token);
 
-      setUser({ id: data.id, role: data.role }); // Update user state
+      if (data && data.token && data.role) {
+        localStorage.setItem("token", data.token); // Save token in localStorage
+        localStorage.setItem("role", data.role); // Save role in localStorage (optional)
 
-      // Redirect based on role
-      navigate(data.role === "admin" ? "/admin-dashboard" : "/user-dashboard");
+        setUser({ id: data.id, role: data.role }); // Update user state
 
+        console.log("Redirecting to: ", data.role === "admin" ? "/admin-dashboard" : "/user-dashboard");
+
+        // Redirect based on the role
+        if (data.role === "admin") {
+          navigate("/admin-dashboard");
+        } else if (data.role === "user") {
+          navigate("/user-dashboard");
+        } else {
+          setError("⚠️ Unknown role. Please try again.");
+        }
+      } else {
+        setError("⚠️ Invalid login response.");
+      }
     } catch (err) {
       console.error("Login Error:", err.response?.data?.message);
       setError(err.response?.data?.message || "Login failed");
@@ -47,6 +60,8 @@ const Login = ({ setUser }) => {
             onChange={(e) => setEmail(e.target.value)}
             className="login-input"
             required
+            id="email"       // Added id
+            name="email"     // Added name
           />
           <input
             type="password"
@@ -55,6 +70,8 @@ const Login = ({ setUser }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="login-input"
             required
+            id="password"    // Added id
+            name="password"  // Added name
           />
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? "Logging in..." : "Login"}

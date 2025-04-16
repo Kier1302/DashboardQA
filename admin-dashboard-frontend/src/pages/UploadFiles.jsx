@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar";
+
 
 const UploadFiles = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -33,19 +35,22 @@ const UploadFiles = () => {
   };
 
   return (
-    <div className="upload-section">
-      <h3>📤 Upload Files / Links</h3>
-      <form onSubmit={handleFileUpload}>
-        <input type="file" onChange={(e) => setSelectedFile(e.target.files[0])} />
-        <input
-          type="text"
-          placeholder="Or enter a URL..."
-          value={uploadUrl}
-          onChange={(e) => setUploadUrl(e.target.value)}
-        />
-        <button type="submit">Upload</button>
-      </form>
-    </div>
+    <>
+      <Navbar /> {/* ✅ Navbar added here */}
+      <div className="upload-section">
+        <h3>📤 Upload Files / Links</h3>
+        <form onSubmit={handleFileUpload}>
+          <input type="file" onChange={(e) => setSelectedFile(e.target.files[0])} />
+          <input
+            type="text"
+            placeholder="Or enter a URL..."
+            value={uploadUrl}
+            onChange={(e) => setUploadUrl(e.target.value)}
+          />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </>
   );
 };
 
