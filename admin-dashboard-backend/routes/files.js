@@ -23,11 +23,8 @@ const storage = multer.diskStorage({
 });
 
 // 🔹 File Filter for Type Validation
+// Removed file type restriction to allow any kind of document
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-  if (!allowedTypes.includes(file.mimetype)) {
-    return cb(new Error('⚠️ Invalid file type! Only JPG, PNG, and PDF are allowed.'));
-  }
   cb(null, true);
 };
 
@@ -40,11 +37,15 @@ const upload = multer({
 
 // 🔹 Upload File or Link
 router.post("/upload", upload.single("file"), async (req, res) => {
+  console.log("Incoming upload request body:", req.body);
+  console.log("Incoming upload request file:", req.file);
+
   try {
     const { name, type, url } = req.body;
 
     // ✅ Validate required fields
     if (!name || !type) {
+      console.error("⚠️ Missing required fields: name or type");
       return res.status(400).json({ message: "⚠️ Name and Type are required" });
     }
 
@@ -52,6 +53,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     if (type === "file") {
       if (!req.file) {
+        console.error("⚠️ File is missing in request");
         return res.status(400).json({ message: "⚠️ File is missing" });
       }
       fileData.url = `/uploads/${req.file.filename}`;
@@ -60,6 +62,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     // ✅ Avoid duplicate uploads
     const existingFile = await File.findOne({ name, url });
     if (existingFile) {
+      console.error("⚠️ File already exists");
       return res.status(400).json({ message: "⚠️ File already exists" });
     }
 

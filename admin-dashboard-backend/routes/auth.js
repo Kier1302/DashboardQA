@@ -74,8 +74,10 @@ router.post("/login", async (req, res) => {
 
 // 🔹 GET CURRENT USER (🔹 Fixes 404 Error)
 const authMiddleware = (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) return res.status(401).json({ message: "Access denied. No token provided." });
+  const authHeader = req.header("Authorization");
+  if (!authHeader) return res.status(401).json({ message: "Access denied. No token provided." });
+
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7, authHeader.length) : authHeader;
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

@@ -6,15 +6,17 @@ import AdminDashboard from "./pages/AdminDashboard";
 import UploadFiles from "./pages/UploadFiles";
 import ApproveRejectFiles from "./pages/ApproveRejectFiles";
 import DeleteFiles from "./pages/DeleteFiles";
+import DefineRequirement from "./pages/DefineRequirement"; 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import Register from "./pages/Register"; // ✅ Capitalized properly
+import Register from "./pages/Register";
 import UserDashboard from "./pages/UserDashboard";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch user on load to check if the user is logged in and has a valid token
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
@@ -32,7 +34,7 @@ const App = () => {
       } catch (error) {
         console.error("Error fetching user:", error);
         setUser(null);
-        localStorage.removeItem("token");
+        localStorage.removeItem("token"); // Clear the token on error
       } finally {
         setLoading(false);
       }
@@ -41,21 +43,37 @@ const App = () => {
     fetchUser();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>; // Show loading indicator until user data is fetched
 
   return (
     <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="/register" element={<Register />} /> {/* ✅ Register route */}
+        <Route path="/register" element={<Register />} />
         
-        {/* User Dashboard */}
+        {/* User Dashboard Routes */}
         <Route
           path="/user-dashboard"
           element={
             <ProtectedRoute user={user} role="user">
               <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-dashboard/upload"
+          element={
+            <ProtectedRoute user={user} role="user">
+              <UploadFiles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-dashboard/files"
+          element={
+            <ProtectedRoute user={user} role="user">
+              <DeleteFiles />
             </ProtectedRoute>
           }
         />
@@ -84,7 +102,6 @@ const App = () => {
               <DeleteFiles />
             </ProtectedRoute>
           }
-          
         />
         <Route
           path="/admin-dashboard/approval"
@@ -94,25 +111,16 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-         <Route
-          path="/user-dashboard/upload"
+        <Route
+          path="/admin-dashboard/define-requirement"  // Route for Define Requirement page
           element={
-            <ProtectedRoute user={user} role="user">
-              <UploadFiles />
+            <ProtectedRoute user={user} role="admin">
+              <DefineRequirement />
             </ProtectedRoute>
           }
         />
-          <Route
-          path="/user-dashboard/files"
-          element={
-            <ProtectedRoute user={user} role="user">
-              <DeleteFiles />
-            </ProtectedRoute>
-          }
-          
-        />
-
-        {/* Role-based Redirection */}
+        
+        {/* Dashboard Redirection */}
         <Route
           path="/dashboard"
           element={
@@ -124,7 +132,7 @@ const App = () => {
           }
         />
 
-        {/* Fallback */}
+        {/* Fallback Route */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

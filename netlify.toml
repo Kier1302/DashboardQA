@@ -1,4 +1,0 @@
-[build]
-  base    = "admin-dashboard-frontend"
-  command = "npm run build"
-  publish = "dist"

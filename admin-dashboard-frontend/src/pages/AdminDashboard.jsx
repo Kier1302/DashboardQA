@@ -12,6 +12,8 @@ const AdminDashboard = () => {
       navigate("/admin-dashboard/files");
     } else if (section === "approval") {
       navigate("/admin-dashboard/approval");
+    } else if (section === "define-requirement") {
+      navigate("/admin-dashboard/define-requirement");
     }
   };
 
@@ -20,9 +22,6 @@ const AdminDashboard = () => {
       <Navbar />
 
       <div className="admin-dashboard">
-
-        {/* Logout Button */}
-
         {/* Clickable Containers */}
         <div className="dashboard-sections">
           <div
@@ -42,6 +41,12 @@ const AdminDashboard = () => {
             onClick={() => handleContainerClick("approval")}
           >
             <h3>✅ Approve / ❌ Reject Files</h3>
+          </div>
+          <div
+            className="dashboard-container"
+            onClick={() => handleContainerClick("define-requirement")}
+          >
+            <h3>📝 Define Requirements</h3>
           </div>
         </div>
       </div>

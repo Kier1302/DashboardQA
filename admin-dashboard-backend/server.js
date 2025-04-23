@@ -7,6 +7,7 @@ const path = require("path");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const fileRoutes = require("./routes/files"); // Added File Management Routes
+const requirementRoutes = require('./routes/requirementRoutes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/files", require("./routes/files"));
+app.use('/api/requirements', requirementRoutes); // Add this line
 
 // Connect to MongoDB
 mongoose
