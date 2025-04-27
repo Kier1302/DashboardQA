@@ -20,33 +20,34 @@ const AdminDashboard = () => {
   return (
     <>
       <Navbar />
-
-      <div className="admin-dashboard">
-        {/* Clickable Containers */}
-        <div className="dashboard-sections">
-          <div
-            className="dashboard-container"
-            onClick={() => handleContainerClick("upload")}
-          >
-            <h3>📤 Upload Files / Links</h3>
-          </div>
-          <div
-            className="dashboard-container"
-            onClick={() => handleContainerClick("files")}
-          >
-            <h3>📄 View All Uploaded Files</h3>
-          </div>
-          <div
-            className="dashboard-container"
-            onClick={() => handleContainerClick("approval")}
-          >
-            <h3>✅ Approve / ❌ Reject Files</h3>
-          </div>
-          <div
-            className="dashboard-container"
-            onClick={() => handleContainerClick("define-requirement")}
-          >
-            <h3>📝 Define Requirements</h3>
+      <div className="admin-dashboard-wrapper">
+        <div className="admin-dashboard">
+          {/* Clickable Containers */}
+          <div className="dashboard-sections">
+            <div
+              className="dashboard-container"
+              onClick={() => handleContainerClick("upload")}
+            >
+              <h3>📤 Upload Files / Links</h3>
+            </div>
+            <div
+              className="dashboard-container"
+              onClick={() => handleContainerClick("files")}
+            >
+              <h3>📄 View All Uploaded Files</h3>
+            </div>
+            <div
+              className="dashboard-container"
+              onClick={() => handleContainerClick("approval")}
+            >
+              <h3>✅ Approve / ❌ Reject Files</h3>
+            </div>
+            <div
+              className="dashboard-container"
+              onClick={() => handleContainerClick("define-requirement")}
+            >
+              <h3>📝 Define Requirements</h3>
+            </div>
           </div>
         </div>
       </div>

@@ -2,18 +2,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1e1e2f;
-    color: white;
-    padding: 15px 25px;
-    position: sticky;
+    background-color: #f9fafb; /* light background */
+    color: #1f2937; /* dark text */
+    padding: 15px 40px 15px 25px; /* increased right padding */
+    position: fixed;
     top: 0;
+    width: 100%;
+    box-sizing: border-box; /* include padding in width */
     z-index: 999;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
   
   .nav-logo {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 600;
+    color: #2563eb; /* blue accent */
   }
   
   .nav-links {
@@ -23,28 +26,28 @@
   }
   
   .nav-links a {
-    color: white;
+    color: #1f2937;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
   }
   
   .nav-links a:hover {
-    color: #4dabf7;
+    color: #16a34a; /* green accent on hover */
   }
   
-  .logout-btn {
-    background-color: #ff4d4f;
+.logout-btn {
+    background-color: #16a34a; /* green button */
     border: none;
     color: white;
-    padding: 7px 12px;
+    padding: 7px 16px; /* increased horizontal padding */
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
   }
   
   .logout-btn:hover {
-    background-color: #d9363e;
+    background-color: #15803d;
   }
   
   /* Hamburger */
@@ -57,7 +60,7 @@
   .nav-toggle span {
     height: 3px;
     width: 25px;
-    background: white;
+    background: #1f2937;
     margin-bottom: 5px;
     border-radius: 2px;
     transition: 0.3s;
@@ -68,11 +71,12 @@
       position: absolute;
       top: 60px;
       right: 0;
-      background: #1e1e2f;
+      background: #f9fafb;
       flex-direction: column;
       width: 200px;
       padding: 20px;
       display: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
   
     .nav-links.open {

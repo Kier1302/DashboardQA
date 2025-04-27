@@ -36,69 +36,68 @@ const UploadFiles = () => {
   return (
     <>
       <Navbar />
-      <div >
-        <h3></h3>
-        
-      
-        <h3>🧾 Uploaded Requirements and Files</h3>
-        {files.length === 0 ? (
-          <p>❌ No uploaded requirements found.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Requirement Name</th>
-                <th>File</th>
-                <th>URL</th>
-                <th>Status</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {files.map((file) => (
-                <tr key={file._id}>
-                  <td>{file.name}</td>
-                  <td>
-                    {file.type === "file" && file.url ? (
-                      <a
-                        href={`http://localhost:5000${file.url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Download File
-                      </a>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td>
-                    {file.type === "link" && file.url ? (
-                      <a href={file.url} target="_blank" rel="noopener noreferrer">
-                        {file.url}
-                      </a>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td>
-                    {file.status === "accepted" ? (
-                      <span style={{ color: "green" }}>✅ Accepted</span>
-                    ) : file.status === "rejected" ? (
-                      <span style={{ color: "red" }}>❌ Rejected</span>
-                    ) : (
-                      <span style={{ color: "orange" }}>⏳ Pending</span>
-                    )}
-                  </td>
-                  <td>
-                    <button onClick={() => handleDelete(file._id)}>
-                      🗑 Delete
-                    </button>
-                  </td>
+      <div>
+        <div className="page-container">
+          <h3>🧾 Uploaded Requirements and Files</h3>
+          {files.length === 0 ? (
+            <p>❌ No uploaded requirements found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Requirement Name</th>
+                  <th>File</th>
+                  <th>URL</th>
+                  <th>Status</th>
+                  <th>Delete</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {files.map((file) => (
+                  <tr key={file._id}>
+                    <td>{file.name}</td>
+                    <td>
+                      {file.type === "file" && file.url ? (
+                        <a
+                          href={`http://localhost:5000${file.url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Download File
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {file.type === "link" && file.url ? (
+                        <a href={file.url} target="_blank" rel="noopener noreferrer">
+                          {file.url}
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {file.status === "accepted" ? (
+                        <span style={{ color: "green" }}>✅ Accepted</span>
+                      ) : file.status === "rejected" ? (
+                        <span style={{ color: "red" }}>❌ Rejected</span>
+                      ) : (
+                        <span style={{ color: "orange" }}>⏳ Pending</span>
+                      )}
+                    </td>
+                    <td>
+                      <button onClick={() => handleDelete(file._id)}>
+                        🗑 Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </>
   );

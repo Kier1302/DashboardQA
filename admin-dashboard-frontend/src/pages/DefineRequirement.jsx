@@ -31,52 +31,54 @@ const DefineRequirement = () => {
     <>
       <Navbar />
       <div className="define-requirement">
-        <h3>📝 Define Requirements</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Requirement Name</th>
-              <th>Description</th>
-              <th>Type</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requirements.map((requirement, index) => (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    value={requirement.name}
-                    onChange={(e) => handleChangeRequirement(index, "name", e.target.value)}
-                    placeholder="Requirement Name"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={requirement.description}
-                    onChange={(e) => handleChangeRequirement(index, "description", e.target.value)}
-                    placeholder="Description"
-                  />
-                </td>
-                <td>
-                  <select
-                    value={requirement.type}
-                    onChange={(e) => handleChangeRequirement(index, "type", e.target.value)}
-                  >
-                    <option value="file">File</option>
-                    <option value="url">URL</option>
-                  </select>
-                </td>
-                <td>
-                  <button onClick={handleSaveRequirements}>💾 Save</button>
-                </td>
+        <div className="page-container">
+          <h3>📝 Define Requirements</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Requirement Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={handleAddRequirement}>➕ Add Requirement</button>
+            </thead>
+            <tbody>
+              {requirements.map((requirement, index) => (
+                <tr key={index}>
+                  <td>
+                    <input
+                      type="text"
+                      value={requirement.name}
+                      onChange={(e) => handleChangeRequirement(index, "name", e.target.value)}
+                      placeholder="Requirement Name"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={requirement.description}
+                      onChange={(e) => handleChangeRequirement(index, "description", e.target.value)}
+                      placeholder="Description"
+                    />
+                  </td>
+                  <td>
+                    <select
+                      value={requirement.type}
+                      onChange={(e) => handleChangeRequirement(index, "type", e.target.value)}
+                    >
+                      <option value="file">File</option>
+                      <option value="url">URL</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button onClick={handleSaveRequirements}>💾 Save</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={handleAddRequirement}>➕ Add Requirement</button>
+        </div>
       </div>
     </>
   );
