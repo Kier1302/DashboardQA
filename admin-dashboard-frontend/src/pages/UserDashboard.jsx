@@ -128,8 +128,12 @@ const UserDashboard = () => {
                                 placeholder="Enter URL"
                                 value={uploads[requirement._id] || ""}
                                 onChange={(e) => setUploads({ ...uploads, [requirement._id]: e.target.value })}
+                                style={{ marginRight: "8px", padding: "6px", borderRadius: "4px", border: "1px solid #ccc", width: "70%" }}
                               />
-                              <button onClick={() => handleFileUpload(requirement._id, uploads[requirement._id])}>
+                              <button
+                                onClick={() => handleFileUpload(requirement._id, uploads[requirement._id])}
+                                style={{ padding: "6px 12px", borderRadius: "4px", border: "none", backgroundColor: "black", color: "white", cursor: "pointer" }}
+                              >
                                 Upload URL
                               </button>
                             </>
