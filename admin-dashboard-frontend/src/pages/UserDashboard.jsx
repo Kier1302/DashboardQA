@@ -71,6 +71,7 @@ const UserDashboard = () => {
       }
 
       alert("✅ File uploaded successfully");
+      window.location.reload();
     } catch (error) {
       console.error("Error uploading file:", error);
       const errorMessage = error.response?.data?.message || error.message || "Failed to upload file";

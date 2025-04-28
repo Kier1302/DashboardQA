@@ -16,10 +16,15 @@ const Navbar = () => {
       <div className="nav-logo">Dashboard</div>
 
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
-        <Link to="/admin-dashboard">Dashboard</Link>
-        <Link to="/admin-dashboard/upload">Upload</Link>
-        <Link to="/admin-dashboard/files">Files</Link>
-        <Link to="/admin-dashboard/approval">Approval</Link>
+        {window.location.pathname.startsWith("/user-dashboard") ? null : (
+          <>
+            <Link to="/admin-dashboard">Dashboard</Link>
+            <Link to="/admin-dashboard/upload">Requirements</Link>
+            <Link to="/admin-dashboard/files">Uploaded Files</Link>
+            <Link to="/admin-dashboard/approval">Approval</Link>
+            <Link to="/admin-dashboard/define-requirement">Define Requirement</Link>
+          </>
+        )}
         <button onClick={handleLogout} className="logout-btn">
           Logout
         </button>

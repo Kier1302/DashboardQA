@@ -28,7 +28,7 @@ const AdminDashboard = () => {
               className="dashboard-container"
               onClick={() => handleContainerClick("upload")}
             >
-              <h3>📤 Upload Files / Links</h3>
+              <h3>📤 Uploaded Requirements</h3>
             </div>
             <div
               className="dashboard-container"
